@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import ArticleList from './components/ArticleList';
 import ArticleForm from './components/ArticleForm';
 import PublicArticle from './components/PublicArticle';
@@ -63,7 +63,16 @@ function App() {
           {/* RUTAS PÚBLICAS */}
           <Route path="/blog/:slug" element={<PublicArticle />} />
           
-          {/* RUTAS PROTEGIDAS */}
+          {/* RUTA DE LOGIN (siempre accesible) */}
+          <Route path="/login" element={
+            isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          } />
+          
+          {/* RUTAS PROTEGIDAS - SOLO PARA USUARIOS AUTENTICADOS */}
           {isAuthenticated ? (
             <>
               <Route path="/" element={
@@ -126,15 +135,43 @@ function App() {
               <Route path="/products/:id/links" element={<ProductLinks />} />
             </>
           ) : (
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            // Página de inicio para usuarios no autenticados
+            <Route path="/" element={
+              <div style={{ padding: '40px', textAlign: 'center' }}>
+                <h1>🚀 Blog de Laptops Gaming</h1>
+                <p>Panel de administración de contenido</p>
+                <div style={{ marginTop: '30px' }}>
+                  <Link to="/login" style={{
+                    padding: '12px 24px',
+                    background: '#4caf50',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '5px',
+                    fontSize: '1.1rem',
+                    fontWeight: 'bold'
+                  }}>
+                    🔐 Iniciar Sesión en el Panel
+                  </Link>
+                </div>
+                <div style={{ marginTop: '40px', padding: '20px', background: '#f5f5f5', borderRadius: '10px', maxWidth: '600px', margin: '40px auto' }}>
+                  <h3>📝 ¿Qué puedes hacer aquí?</h3>
+                  <ul style={{ textAlign: 'left', marginTop: '15px' }}>
+                    <li>Gestionar artículos del blog</li>
+                    <li>Administrar productos de laptops gaming</li>
+                    <li>Crear enlaces de afiliados</li>
+                    <li>Gestionar contenido multimedia</li>
+                  </ul>
+                </div>
+              </div>
+            } />
           )}
           
           {/* RUTA POR DEFECTO */}
-          <Route path="*" element={isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" />} />
+          <Route path="*" element={isAuthenticated ? <Navigate to="/" /> : <Navigate to="/" />} />
         </Routes>
 
         <footer style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f5f5f5' }}>
-          <p>Backend API: http://localhost:3001</p>
+          <p>Backend API: https://api-blog-09qt.onrender.com</p>
           <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '5px' }}>
             © 2025 Blog de Laptops Gaming - Panel de Administración
           </p>
