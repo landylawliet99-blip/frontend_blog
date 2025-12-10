@@ -1,43 +1,166 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="theme-color" content="#1a1a1a" />
+    
+    <!-- Meta básicos para SEO -->
+    <title>Blog de Laptops Gaming | Reviews, Comparativas y Guías de Compra</title>
+    <meta name="description" content="Blog especializado en laptops gaming. Análisis técnicos, reviews, comparativas y guías de compra para jugadores y creadores de contenido." />
+    <meta name="keywords" content="laptops gaming, gaming, NVIDIA, RTX, procesadores, tarjetas gráficas, reviews tecnología" />
+    <meta name="author" content="Blog de Laptops Gaming" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    
+    <!-- Open Graph (Facebook, LinkedIn, etc) -->
+    <meta property="og:title" content="Blog de Laptops Gaming | Reviews y Guías" />
+    <meta property="og:description" content="Las mejores reviews y comparativas de laptops gaming del mercado" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://frontend-blog-r4am.onrender.com" />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
+    <meta property="og:site_name" content="Blog de Laptops Gaming" />
+    <meta property="og:locale" content="es_ES" />
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Blog de Laptops Gaming | Reviews y Guías" />
+    <meta name="twitter:description" content="Las mejores reviews y comparativas de laptops gaming del mercado" />
+    <meta name="twitter:image" content="%PUBLIC_URL%/twitter-image.png" />
+    
+    <!-- Apple/iOS -->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+    <meta name="apple-mobile-web-app-title" content="Laptops Gaming" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Microsoft -->
+    <meta name="application-name" content="Blog de Laptops Gaming" />
+    <meta name="msapplication-TileColor" content="#1a1a1a" />
+    <meta name="msapplication-config" content="%PUBLIC_URL%/browserconfig.xml" />
+    
+    <!-- PWA/Manifest -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    
+    <!-- Preconnect para APIs externas (si usas imágenes de terceros, APIs, etc) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Estructuración de datos para SEO (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Blog de Laptops Gaming",
+      "description": "Blog especializado en análisis y reviews de laptops gaming",
+      "url": "https://frontend-blog-r4am.onrender.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://frontend-blog-r4am.onrender.com/#/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Blog de Laptops Gaming",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://frontend-blog-r4am.onrender.com/logo192.png"
+        }
+      }
+    }
+    </script>
+    
+    <!-- Seguridad adicional -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>JavaScript requerido</h1>
+        <p>Para ver este blog necesitas habilitar JavaScript en tu navegador.</p>
+        <p>Este blog está construido con React y requiere JavaScript para funcionar.</p>
+        <p>Si necesitas ayuda para habilitar JavaScript, visita: 
+          <a href="https://www.enable-javascript.com/es/" target="_blank" rel="noopener">enable-javascript.com</a>
+        </p>
+      </div>
+    </noscript>
+    
     <div id="root"></div>
+    
+    <!-- Carga progresiva para mejorar experiencia -->
+    <div id="loading-overlay" style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1a1a1a;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    ">
+      <div style="
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #4caf50;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      "></div>
+      <p style="font-size: 1.2rem;">Cargando Blog de Laptops Gaming...</p>
+    </div>
+    
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Mejora de rendimiento: prevenir scroll durante carga */
+      body.loading {
+        overflow: hidden;
+      }
+    </style>
+    
+    <script>
+      // Script para manejar la carga progresiva
+      window.addEventListener('load', function() {
+        var overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+          setTimeout(function() {
+            overlay.style.opacity = '0';
+            setTimeout(function() {
+              overlay.style.display = 'none';
+              document.body.classList.remove('loading');
+            }, 500);
+          }, 1000); // 1 segundo mínimo de pantalla de carga
+        }
+      });
+      
+      // Añadir clase loading al body inicialmente
+      document.body.classList.add('loading');
+      
+      // Manejo de errores global
+      window.addEventListener('error', function(e) {
+        console.error('Error global:', e.error);
+        // Aquí podrías enviar el error a un servicio de monitoreo
+      });
+    </script>
+    
     <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
+      Este archivo HTML es una plantilla.
+      La aplicación React se montará dentro del div con id="root".
+      
+      Para desarrollo: npm start o yarn start
+      Para producción: npm run build o yarn build
     -->
   </body>
 </html>
