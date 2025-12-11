@@ -3,164 +3,162 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Blog especializado en reviews y análisis de laptops gaming" />
     
-    <!-- Meta básicos para SEO -->
-    <title>Blog de Laptops Gaming | Reviews, Comparativas y Guías de Compra</title>
-    <meta name="description" content="Blog especializado en laptops gaming. Análisis técnicos, reviews, comparativas y guías de compra para jugadores y creadores de contenido." />
-    <meta name="keywords" content="laptops gaming, gaming, NVIDIA, RTX, procesadores, tarjetas gráficas, reviews tecnología" />
-    <meta name="author" content="Blog de Laptops Gaming" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <!-- 🔐 CONTENT SECURITY POLICY - PERMITIR CONEXIÓN CON LA API -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self' https://api-blog-09qt.onrender.com;
+                   connect-src 'self' https://api-blog-09qt.onrender.com wss:;
+                   script-src 'self' 'unsafe-inline' 'unsafe-eval';
+                   style-src 'self' 'unsafe-inline';
+                   img-src 'self' data: https:;
+                   font-src 'self' data:;
+                   frame-src 'self';
+                   object-src 'none';
+                   base-uri 'self';
+                   form-action 'self';" />
     
-    <!-- Open Graph (Facebook, LinkedIn, etc) -->
-    <meta property="og:title" content="Blog de Laptops Gaming | Reviews y Guías" />
-    <meta property="og:description" content="Las mejores reviews y comparativas de laptops gaming del mercado" />
+    <!-- 👤 OPEN GRAPH TAGS PARA MEJOR COMPARTIR -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://frontend-blog-r4am.onrender.com" />
+    <meta property="og:title" content="Blog de Laptops Gaming" />
+    <meta property="og:description" content="Las mejores reviews, análisis y ofertas de laptops gaming" />
     <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
+    <meta property="og:url" content="https://tu-frontend.onrender.com" />
     <meta property="og:site_name" content="Blog de Laptops Gaming" />
-    <meta property="og:locale" content="es_ES" />
     
-    <!-- Twitter Cards -->
+    <!-- 🐦 TWITTER CARD -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Blog de Laptops Gaming | Reviews y Guías" />
-    <meta name="twitter:description" content="Las mejores reviews y comparativas de laptops gaming del mercado" />
-    <meta name="twitter:image" content="%PUBLIC_URL%/twitter-image.png" />
+    <meta name="twitter:title" content="Blog de Laptops Gaming" />
+    <meta name="twitter:description" content="Las mejores reviews, análisis y ofertas de laptops gaming" />
+    <meta name="twitter:image" content="%PUBLIC_URL%/og-image.png" />
     
-    <!-- Apple/iOS -->
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <meta name="apple-mobile-web-app-title" content="Laptops Gaming" />
+    <!-- 📱 APPLE IOS -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Laptops Gaming" />
     
-    <!-- Microsoft -->
-    <meta name="application-name" content="Blog de Laptops Gaming" />
-    <meta name="msapplication-TileColor" content="#1a1a1a" />
-    <meta name="msapplication-config" content="%PUBLIC_URL%/browserconfig.xml" />
-    
-    <!-- PWA/Manifest -->
+    <!-- 🔗 MANIFEST PARA PWA -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
-    <!-- Preconnect para APIs externas (si usas imágenes de terceros, APIs, etc) -->
+    <!-- 🔍 KEYWORDS PARA SEO -->
+    <meta name="keywords" content="laptops,gaming,review,análisis,tecnología,hardware,nvidia,intel,amd,rtx" />
+    
+    <!-- 🏷️ TÍTULO DE LA PÁGINA -->
+    <title>🖥️ Blog de Laptops Gaming</title>
+    
+    <!-- 📝 ESTILOS DE FUENTES (OPCIONAL) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Estructuración de datos para SEO (Schema.org) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Blog de Laptops Gaming",
-      "description": "Blog especializado en análisis y reviews de laptops gaming",
-      "url": "https://frontend-blog-r4am.onrender.com",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://frontend-blog-r4am.onrender.com/#/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "Blog de Laptops Gaming",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://frontend-blog-r4am.onrender.com/logo192.png"
-        }
+    <style>
+      /* ESTILOS DE CARGA INICIAL */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #f8f9fa;
       }
-    }
-    </script>
-    
-    <!-- Seguridad adicional -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    
+      
+      /* ANIMACIÓN DE CARGA */
+      #root {
+        min-height: 100vh;
+      }
+      
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 20px;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* ESTILOS PARA NO-JS */
+      .no-js-message {
+        text-align: center;
+        padding: 50px 20px;
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        margin: 20px;
+      }
+    </style>
   </head>
   <body>
+    <!-- MENSAJE PARA USUARIOS SIN JAVASCRIPT -->
     <noscript>
-      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
-        <h1>JavaScript requerido</h1>
-        <p>Para ver este blog necesitas habilitar JavaScript en tu navegador.</p>
-        <p>Este blog está construido con React y requiere JavaScript para funcionar.</p>
-        <p>Si necesitas ayuda para habilitar JavaScript, visita: 
-          <a href="https://www.enable-javascript.com/es/" target="_blank" rel="noopener">enable-javascript.com</a>
-        </p>
+      <div class="no-js-message">
+        <h2>JavaScript requerido</h2>
+        <p>Esta aplicación web necesita JavaScript para funcionar correctamente.</p>
+        <p>Por favor, habilita JavaScript en tu navegador y recarga la página.</p>
       </div>
     </noscript>
     
-    <div id="root"></div>
-    
-    <!-- Carga progresiva para mejorar experiencia -->
-    <div id="loading-overlay" style="
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #1a1a1a;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.5s ease;
-    ">
-      <div style="
-        width: 50px;
-        height: 50px;
-        border: 5px solid #f3f3f3;
-        border-top: 5px solid #4caf50;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 20px;
-      "></div>
-      <p style="font-size: 1.2rem;">Cargando Blog de Laptops Gaming...</p>
+    <!-- CONTENEDOR PRINCIPAL DE REACT -->
+    <div id="root">
+      <!-- ANIMACIÓN DE CARGA INICIAL (se reemplaza por React) -->
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <h2>🖥️ Cargando Blog de Laptops Gaming...</h2>
+        <p>Por favor, espera un momento</p>
+      </div>
     </div>
     
-    <style>
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      /* Mejora de rendimiento: prevenir scroll durante carga */
-      body.loading {
-        overflow: hidden;
-      }
-    </style>
-    
+    <!-- 📊 GOOGLE ANALYTICS (OPCIONAL - DESCOMENTAR SI LO USAS) -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
-      // Script para manejar la carga progresiva
-      window.addEventListener('load', function() {
-        var overlay = document.getElementById('loading-overlay');
-        if (overlay) {
-          setTimeout(function() {
-            overlay.style.opacity = '0';
-            setTimeout(function() {
-              overlay.style.display = 'none';
-              document.body.classList.remove('loading');
-            }, 500);
-          }, 1000); // 1 segundo mínimo de pantalla de carga
-        }
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
+    
+    <!-- 🛠️ SCRIPT PARA DEBUG EN PRODUCCIÓN -->
+    <script>
+      // DEBUG: Mostrar información del entorno
+      console.log('🚀 Blog de Laptops Gaming - Frontend cargado');
+      console.log('📡 API Endpoint:', 'https://api-blog-09qt.onrender.com/api');
+      console.log('🌍 Entorno:', process.env.NODE_ENV);
+      console.log('📅 Fecha:', new Date().toLocaleString());
+      
+      // Manejar errores globales
+      window.addEventListener('error', function(e) {
+        console.error('⚠️ Error global capturado:', e.error);
       });
       
-      // Añadir clase loading al body inicialmente
-      document.body.classList.add('loading');
-      
-      // Manejo de errores global
-      window.addEventListener('error', function(e) {
-        console.error('Error global:', e.error);
-        // Aquí podrías enviar el error a un servicio de monitoreo
+      // Verificar conexión a API
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          fetch('https://api-blog-09qt.onrender.com/api/health')
+            .then(res => res.json())
+            .then(data => console.log('✅ API Conectada:', data))
+            .catch(err => console.warn('⚠️ API no disponible:', err.message));
+        }, 1000);
       });
     </script>
-    
-    <!--
-      Este archivo HTML es una plantilla.
-      La aplicación React se montará dentro del div con id="root".
-      
-      Para desarrollo: npm start o yarn start
-      Para producción: npm run build o yarn build
-    -->
   </body>
 </html>

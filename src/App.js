@@ -1,5 +1,7 @@
+// frontend_blog/src/App.js
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import ArticleList from './components/ArticleList';
 import ArticleForm from './components/ArticleForm';
 import PublicArticle from './components/PublicArticle';
@@ -7,13 +9,13 @@ import ProductList from './components/ProductList';
 import ProductForm from './components/ProductForm';
 import ProductLinks from './components/ProductLinks';
 import Login from './components/Login';
-import HomePage from './components/HomePage'; // IMPORTAR HomePage
+import HomePage from './components/HomePage';
 import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [showAdminAccess, setShowAdminAccess] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -26,8 +28,7 @@ function App() {
 
   const handleLogin = (userData) => {
     setIsAuthenticated(true);
-    setUser(userData);
-    setShowAdminPanel(true);
+    setUser(userData.user || userData);
   };
 
   const handleLogout = () => {
@@ -35,223 +36,501 @@ function App() {
     localStorage.removeItem('user');
     setIsAuthenticated(false);
     setUser(null);
-    setShowAdminPanel(false);
+    window.location.hash = '#/';
   };
 
-  // Navbar Público - Para usuarios normales
-  const PublicNavbar = () => (
-    <nav style={{
-      backgroundColor: '#1a1a1a',
-      padding: '15px 20px',
-      color: 'white',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }}>
-      <div>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none', fontSize: '1.5rem', fontWeight: 'bold' }}>
-          🖥️ Blog de Laptops Gaming
-        </Link>
-      </div>
-      <div>
-        <Link to="/" style={{ color: 'white', margin: '0 15px', textDecoration: 'none' }}>Inicio</Link>
-        {!isAuthenticated ? (
-          <Link to="/login" style={{ 
-            color: 'white', 
-            margin: '0 15px', 
-            textDecoration: 'none',
-            padding: '8px 15px',
-            background: '#4caf50',
-            borderRadius: '4px'
-          }}>Admin Login</Link>
-        ) : (
-          <button 
-            onClick={() => setShowAdminPanel(true)}
-            style={{
-              padding: '8px 15px',
-              background: '#2196f3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Panel Admin
-          </button>
-        )}
-      </div>
-    </nav>
-  );
-
-  // Navbar Admin - Solo para panel admin
-  const AdminNavbar = () => (
-    <header style={{
-      backgroundColor: '#282c34',
-      padding: '20px',
-      color: 'white',
-      textAlign: 'center'
-    }}>
-      <h1>🖥️ Blog de Laptops Gaming - Panel de Administración</h1>
-      <p>Bienvenido, {user?.username} ({user?.email})</p>
-      <nav style={{ marginTop: '20px' }}>
-        <button 
-          onClick={() => setShowAdminPanel(false)}
-          style={{
-            padding: '8px 15px',
-            background: '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginRight: '15px'
-          }}
-        >
-          ← Volver al Blog
-        </button>
-        <Link to="/admin" style={{ color: 'white', margin: '0 15px', textDecoration: 'none' }}>🏠 Inicio</Link>
-        <Link to="/admin/articles" style={{ color: 'white', margin: '0 15px', textDecoration: 'none' }}>📝 Artículos</Link>
-        <Link to="/admin/articles/new" style={{ color: 'white', margin: '0 15px', textDecoration: 'none' }}>➕ Nuevo Artículo</Link>
-        <Link to="/admin/products" style={{ color: 'white', margin: '0 15px', textDecoration: 'none' }}>🖥️ Productos</Link>
-        <Link to="/admin/products/new" style={{ color: 'white', margin: '0 15px', textDecoration: 'none' }}>➕ Nuevo Producto</Link>
-        <button onClick={handleLogout} style={{
-          marginLeft: '20px', padding: '8px 15px', background: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'
-        }}>Cerrar Sesión</button>
-      </nav>
-    </header>
-  );
+  const handlePlaceholderLink = (e, message) => {
+    e.preventDefault();
+    alert(`${message} - Esta funcionalidad está en desarrollo.`);
+  };
 
   return (
-    <Router>
-      <div className="App">
-        {/* Mostrar Navbar dependiendo del contexto */}
-        {showAdminPanel && isAuthenticated ? <AdminNavbar /> : <PublicNavbar />}
-
-        <Routes>
-          {/* ============ RUTAS PÚBLICAS ============ */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/blog/:slug" element={<PublicArticle />} />
-          
-          {/* ============ RUTA DE LOGIN ============ */}
-          <Route path="/login" element={
-            isAuthenticated ? (
-              <Navigate to="/admin" />
-            ) : (
-              <Login onLogin={handleLogin} />
-            )
-          } />
-          
-          {/* ============ RUTAS PROTEGIDAS (ADMIN) ============ */}
-          {isAuthenticated ? (
+    <HelmetProvider>
+      <Router>
+        <div className="App">
+          {!isAuthenticated ? (
             <>
-              <Route path="/admin" element={
-                <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-                  <h2>📊 Panel de Control</h2>
-                  <p>Selecciona una opción del menú superior</p>
-                  <div style={{ marginTop: '20px', padding: '20px', background: '#f5f5f5', borderRadius: '5px' }}>
-                    <h3>📈 Estadísticas</h3>
-                    <p>Usuario: <strong>{user?.username}</strong></p>
-                    <p>Email: <strong>{user?.email}</strong></p>
-                    <p>Rol: <strong>{user?.role}</strong></p>
+              <header style={{
+                backgroundColor: '#1a1a1a',
+                padding: '20px 0',
+                borderBottom: '3px solid #ff6b00'
+              }}>
+                <div style={{
+                  maxWidth: '1200px',
+                  margin: '0 auto',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '0 20px'
+                }}>
+                  <Link to="/" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '1.8rem',
+                    fontWeight: 'bold',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}>
+                    <span style={{ fontSize: '2rem' }}>🎮</span>
+                    <div>
+                      <div style={{ lineHeight: '1.2' }}>LAPTOPS GAMING</div>
+                      <div style={{ fontSize: '0.8rem', color: '#ccc', fontWeight: 'normal' }}>Reviews, Análisis y Guías</div>
+                    </div>
+                  </Link>
+
+                  <nav style={{
+                    display: 'flex',
+                    gap: '30px',
+                    alignItems: 'center'
+                  }}>
+                    <Link to="/" style={{
+                      color: '#fff',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '500',
+                      transition: 'color 0.3s'
+                    }} onMouseEnter={e => e.target.style.color = '#ff6b00'}
+                      onMouseLeave={e => e.target.style.color = '#fff'}>
+                      Inicio
+                    </Link>
+                    
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Categoría: Reviews')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#ccc',
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        fontWeight: '500',
+                        padding: '8px 12px',
+                        borderRadius: '4px',
+                        transition: 'all 0.3s'
+                      }}
+                      onMouseEnter={e => {
+                        e.target.style.color = '#ff6b00';
+                        e.target.style.backgroundColor = 'rgba(255, 107, 0, 0.1)';
+                      }}
+                      onMouseLeave={e => {
+                        e.target.style.color = '#ccc';
+                        e.target.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      Reviews
+                    </button>
+                    
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Categoría: Guías')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#ccc',
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        fontWeight: '500',
+                        padding: '8px 12px',
+                        borderRadius: '4px',
+                        transition: 'all 0.3s'
+                      }}
+                      onMouseEnter={e => {
+                        e.target.style.color = '#ff6b00';
+                        e.target.style.backgroundColor = 'rgba(255, 107, 0, 0.1)';
+                      }}
+                      onMouseLeave={e => {
+                        e.target.style.color = '#ccc';
+                        e.target.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      Guías
+                    </button>
+                    
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Categoría: Ofertas')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#ccc',
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        fontWeight: '500',
+                        padding: '8px 12px',
+                        borderRadius: '4px',
+                        transition: 'all 0.3s'
+                      }}
+                      onMouseEnter={e => {
+                        e.target.style.color = '#ff6b00';
+                        e.target.style.backgroundColor = 'rgba(255, 107, 0, 0.1)';
+                      }}
+                      onMouseLeave={e => {
+                        e.target.style.color = '#ccc';
+                        e.target.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      Ofertas
+                    </button>
+
+                    <div style={{ position: 'relative' }}>
+                      <button
+                        onClick={() => setShowAdminAccess(!showAdminAccess)}
+                        style={{
+                          background: 'transparent',
+                          border: '1px solid #666',
+                          color: '#ccc',
+                          cursor: 'pointer',
+                          fontSize: '1rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          padding: '8px 12px',
+                          borderRadius: '4px',
+                          transition: 'all 0.3s'
+                        }}
+                        onMouseEnter={e => {
+                          e.target.style.borderColor = '#ff6b00';
+                          e.target.style.color = '#fff';
+                        }}
+                        onMouseLeave={e => {
+                          e.target.style.borderColor = '#666';
+                          e.target.style.color = '#ccc';
+                        }}
+                      >
+                        <span>🔐</span>
+                        <span>Admin</span>
+                      </button>
+                      
+                      {showAdminAccess && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '100%',
+                          right: 0,
+                          backgroundColor: '#2c3e50',
+                          minWidth: '180px',
+                          borderRadius: '4px',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                          zIndex: 1000,
+                          marginTop: '5px',
+                          padding: '15px'
+                        }}>
+                          <p style={{ color: '#ecf0f1', margin: '0 0 10px 0', fontSize: '0.9rem' }}>
+                            Acceso al panel de administración
+                          </p>
+                          <Link 
+                            to="/login" 
+                            style={{
+                              display: 'block',
+                              padding: '10px',
+                              backgroundColor: '#3498db',
+                              color: 'white',
+                              textDecoration: 'none',
+                              borderRadius: '4px',
+                              textAlign: 'center',
+                              fontWeight: 'bold'
+                            }}
+                            onClick={() => setShowAdminAccess(false)}
+                          >
+                            🔑 Iniciar Sesión
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  </nav>
+                </div>
+              </header>
+
+              <main style={{ minHeight: 'calc(100vh - 200px)' }}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/blog/:slug" element={<PublicArticle />} />
+                  <Route path="/login" element={<Login onLogin={handleLogin} />} />
+                  <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+              </main>
+            </>
+          ) : (
+            <>
+              <header style={{
+                backgroundColor: '#1a1a1a',
+                padding: '15px 0',
+                borderBottom: '3px solid #3498db'
+              }}>
+                <div style={{
+                  maxWidth: '1200px',
+                  margin: '0 auto',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '0 20px'
+                }}>
+                  <div style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}>
+                    <span style={{ fontSize: '2rem' }}>⚙️</span>
+                    <div>
+                      <div style={{ lineHeight: '1.2' }}>PANEL DE ADMINISTRACIÓN</div>
+                      <div style={{ fontSize: '0.8rem', color: '#ccc', fontWeight: 'normal' }}>
+                        Blog de Laptops Gaming
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ marginTop: '30px', padding: '20px', background: '#e8f5e9', borderRadius: '5px' }}>
-                    <h3>🚀 Acciones Rápidas</h3>
-                    <div style={{ display: 'flex', gap: '15px', marginTop: '15px', flexWrap: 'wrap' }}>
-                      <Link to="/admin/articles/new" style={{
-                        padding: '10px 20px',
-                        background: '#4caf50',
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <Link to="/articles" style={{
+                      color: '#fff',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '500',
+                      padding: '8px 15px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.3s'
+                    }} onMouseEnter={e => e.target.style.backgroundColor = '#3498db'}
+                      onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}>
+                      📝 Artículos
+                    </Link>
+                    
+                    <Link to="/products" style={{
+                      color: '#fff',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '500',
+                      padding: '8px 15px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.3s'
+                    }} onMouseEnter={e => e.target.style.backgroundColor = '#3498db'}
+                      onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}>
+                      🖥️ Productos
+                    </Link>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                      <span style={{ color: '#4caf50', fontSize: '0.9rem' }}>
+                        👤 {user?.username || user?.email || 'Administrador'}
+                      </span>
+                      <button
+                        onClick={handleLogout}
+                        style={{
+                          padding: '8px 16px',
+                          backgroundColor: '#e74c3c',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        🚪 Cerrar Sesión
+                      </button>
+                      
+                      <Link to="/" style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#27ae60',
                         color: 'white',
                         textDecoration: 'none',
-                        borderRadius: '5px',
-                        display: 'inline-block'
+                        borderRadius: '4px',
+                        fontSize: '0.9rem'
                       }}>
-                        ➕ Nuevo Artículo
-                      </Link>
-                      <Link to="/admin/products/new" style={{
-                        padding: '10px 20px',
-                        background: '#2196f3',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '5px',
-                        display: 'inline-block'
-                      }}>
-                        🖥️ Nuevo Producto
-                      </Link>
-                      <Link to="/admin/products" style={{
-                        padding: '10px 20px',
-                        background: '#9c27b0',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '5px',
-                        display: 'inline-block'
-                      }}>
-                        🔗 Gestionar Enlaces
+                        👁️ Ver Blog
                       </Link>
                     </div>
                   </div>
                 </div>
-              } />
-              
-              {/* RUTAS DE ARTÍCULOS */}
-              <Route path="/admin/articles" element={<ArticleList />} />
-              <Route path="/admin/articles/new" element={<ArticleForm />} />
-              <Route path="/admin/articles/edit/:id" element={<ArticleForm />} />
-              
-              {/* RUTAS DE PRODUCTOS */}
-              <Route path="/admin/products" element={<ProductList />} />
-              <Route path="/admin/products/new" element={<ProductForm />} />
-              <Route path="/admin/products/edit/:id" element={<ProductForm />} />
-              <Route path="/admin/products/:id/links" element={<ProductLinks />} />
-            </>
-          ) : (
-            // Si no está autenticado y trata de acceder a admin
-            <Route path="/admin/*" element={<Navigate to="/login" />} />
-          )}
-          
-          {/* RUTA POR DEFECTO */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+              </header>
 
-        {/* Footer para todas las páginas */}
-        <footer style={{ 
-          marginTop: '40px', 
-          padding: '20px', 
-          backgroundColor: '#f5f5f5',
-          borderTop: '1px solid #ddd'
-        }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <main style={{ 
+                minHeight: 'calc(100vh - 70px)',
+                backgroundColor: '#f8f9fa',
+                padding: '20px 0'
+              }}>
+                <Routes>
+                  <Route path="/articles" element={<ArticleList />} />
+                  <Route path="/articles/new" element={<ArticleForm />} />
+                  <Route path="/articles/edit/:id" element={<ArticleForm />} />
+                  
+                  <Route path="/products" element={<ProductList />} />
+                  <Route path="/products/new" element={<ProductForm />} />
+                  <Route path="/products/edit/:id" element={<ProductForm />} />
+                  <Route path="/products/:id/links" element={<ProductLinks />} />
+                  
+                  <Route path="/" element={<Navigate to="/articles" />} />
+                  <Route path="/login" element={<Navigate to="/articles" />} />
+                  <Route path="/blog/:slug" element={<Navigate to="/" />} />
+                  <Route path="*" element={<Navigate to="/articles" />} />
+                </Routes>
+              </main>
+            </>
+          )}
+
+          <footer style={{
+            backgroundColor: '#2c3e50',
+            color: '#ecf0f1',
+            padding: '40px 20px 20px',
+            marginTop: '50px'
+          }}>
+            <div style={{
+              maxWidth: '1200px',
+              margin: '0 auto',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '40px'
+            }}>
               <div>
-                <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Blog de Laptops Gaming</p>
-                <p style={{ fontSize: '0.9rem', color: '#666' }}>
-                  Las mejores reviews y análisis de laptops gaming
+                <h3 style={{ color: '#fff', marginBottom: '20px' }}>Laptops Gaming Blog</h3>
+                <p style={{ fontSize: '0.9rem', lineHeight: '1.6' }}>
+                  Tu fuente confiable de reviews, análisis y guías sobre las mejores laptops gaming del mercado.
                 </p>
-              </div>
-              <div>
-                {!isAuthenticated ? (
-                  <Link to="/login" style={{ 
-                    color: '#4caf50', 
+                {!isAuthenticated && (
+                  <Link to="/login" style={{
+                    display: 'inline-block',
+                    marginTop: '15px',
+                    padding: '8px 15px',
+                    backgroundColor: '#3498db',
+                    color: 'white',
                     textDecoration: 'none',
-                    fontWeight: 'bold'
+                    borderRadius: '4px',
+                    fontSize: '0.9rem'
                   }}>
-                    🔐 Acceso Admin
+                    🔐 Acceso Administrador
                   </Link>
-                ) : (
-                  <span style={{ color: '#666', fontSize: '0.9rem' }}>
-                    Conectado como: {user?.username}
-                  </span>
                 )}
               </div>
+
+              <div>
+                <h3 style={{ color: '#fff', marginBottom: '20px' }}>Enlaces</h3>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  <li style={{ marginBottom: '10px' }}>
+                    <Link to="/" style={{ color: '#bdc3c7', textDecoration: 'none' }}>
+                      🏠 Inicio
+                    </Link>
+                  </li>
+                  <li style={{ marginBottom: '10px' }}>
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Categoría: Reviews')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#bdc3c7',
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontSize: '1rem',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      ⭐ Reviews
+                    </button>
+                  </li>
+                  <li style={{ marginBottom: '10px' }}>
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Categoría: Ofertas')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#bdc3c7',
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontSize: '1rem',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      💰 Ofertas
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 style={{ color: '#fff', marginBottom: '20px' }}>Legal</h3>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  <li style={{ marginBottom: '10px' }}>
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Política de Privacidad')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#bdc3c7',
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontSize: '1rem',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      🔒 Política de Privacidad
+                    </button>
+                  </li>
+                  <li style={{ marginBottom: '10px' }}>
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Términos de Uso')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#bdc3c7',
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontSize: '1rem',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      📜 Términos de Uso
+                    </button>
+                  </li>
+                  <li style={{ marginBottom: '10px' }}>
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Enlaces de Afiliados')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#bdc3c7',
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontSize: '1rem',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      🤝 Enlaces de Afiliados
+                    </button>
+                  </li>
+                  <li style={{ marginBottom: '10px' }}>
+                    <button
+                      onClick={(e) => handlePlaceholderLink(e, 'Contacto')}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#bdc3c7',
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontSize: '1rem',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      📧 Contacto
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #eee' }}>
-              <p style={{ fontSize: '0.8rem', color: '#888' }}>
-                © {new Date().getFullYear()} Blog de Laptops Gaming. Este sitio contiene enlaces de afiliado.
-                API Backend: https://api-blog-09qt.onrender.com
+
+            <div style={{
+              borderTop: '1px solid #4a6278',
+              marginTop: '40px',
+              paddingTop: '20px',
+              textAlign: 'center'
+            }}>
+              <p style={{ fontSize: '0.9rem', color: '#95a5a6' }}>
+                © {new Date().getFullYear()} Laptops Gaming Blog. Todos los derechos reservados.
+              </p>
+              <p style={{ fontSize: '0.8rem', color: '#7f8c8d', marginTop: '10px' }}>
+                <em>Este sitio contiene enlaces de afiliado. Las compras realizadas a través de estos enlaces 
+                pueden generar una comisión que ayuda a mantener el sitio, sin costo adicional para ti.</em>
               </p>
             </div>
-          </div>
-        </footer>
-      </div>
-    </Router>
+          </footer>
+        </div>
+      </Router>
+    </HelmetProvider>
   );
 }
 
